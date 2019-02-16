@@ -1,6 +1,6 @@
 const readline = require('readline');
 
-// TODO ; -2018; Можно ли написать более лаконично?
+// TODO ; 2018; Можно ли написать более лаконично?
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -8,11 +8,12 @@ const rl = readline.createInterface({
 });
 
 function readLine(callback, param) {
-    rl.on('line', (input) => callback(input, param)); // TODO pe; 2015-08-10; а какая будет кодировка?
+    rl.on('line', (input) => callback(input, param)); // TODO pe; 2015; а какая будет кодировка?
 }
 
-// TODO digi 2016-04-08; добавить writeLine!!!
-// TODO digi; 2016-04-08; доб!!!
+// TODO digi 2016; добавить writeLine!!!
+// TODO digi; 2016; доб!!!
+// TODO ty;2019;gy
 
 module.exports = {
     readLine,

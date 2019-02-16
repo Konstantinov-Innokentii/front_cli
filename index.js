@@ -3,15 +3,6 @@ const { readLine } = require('./console');
 const Todo = require('./todo.js');
 
 
-// let INVALID_MESSAGE = 'Invalid command. Type -h for help.';
-
-// let HELP = `Available commands:\n
-//  show -  view all TODO
-//  sort {importance | user | date} - view TODO sorted according to option
-//  important – view only important TODO
-//  user {username} - view TODO only from selected user
-//  date {yyyy[-mm-dd]} - view all TODO created after transmitted date (inclusive)`.trim();
-
 let INVALID_MESSAGE = 'wrong command';
 
 app();
@@ -74,6 +65,7 @@ function processCommand (command, todos) {
                 console.log(INVALID_MESSAGE);
             break;
         case 'user':
+            // учитываем, что имя пользователя может состоять из нескольких слов
             const username = command_splited.slice(1).join(' ');
             console.log(Todo.toTable(todos.filter(todo => todo.user && todo.user.toLowerCase().startsWith(username.toLowerCase()))));
             break;
@@ -89,26 +81,7 @@ function processCommand (command, todos) {
                 console.log(INVALID_MESSAGE)
             }
             break;
-        // case '-h':
-        //     console.log(HELP);
-        //     console.log('\n');
-        //     break;
         default:
-            // let commandGuess;
-            // if (command.startsWith('sh'))
-            //     commandGuess = 'show';
-            // if (command.startsWith('ex'))
-            //     commandGuess = 'exit';
-            // if (command.startsWith('im'))
-            //     commandGuess = 'important';
-            // if (command.startsWith('us'))
-            //     commandGuess = 'user {user}';
-            // if (command.startsWith('da'))
-            //     commandGuess = 'date yyyy[-mm-dd]';
-            // if (command.startsWith('so'))
-            //     commandGuess = 'sort {importance | user | date}';
-            //
-            // console.log(`${INVALID_MESSAGE}${commandGuess ? '\nDid u mean '+ commandGuess + '?' : ''}`);
             console.log(INVALID_MESSAGE);
             break
     }
