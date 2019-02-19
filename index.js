@@ -72,10 +72,10 @@ function processCommand (command, todos) {
         case 'date':
             if (command_splited.length === 2) {
                 const date = new Date(command_splited[1]);
-                if (/^\d{1,4}(?:-\d{1,2}){0,2}/.test(command_splited[1]) && date instanceof Date && !isNaN(date)) {
+                if (/^\d{4}(?:-\d{1,2}){0,2}/.test(command_splited[1]) && date instanceof Date && !isNaN(date)) {
                     console.log(Todo.toTable(todos.filter(todo => todo.DateObj && todo.DateObj >= date)));
                 } else {
-                    console.log('Invalid date format, please use yyyy[-mm-dd]')
+                    console.log(INVALID_MESSAGE)
                 }
             } else {
                 console.log(INVALID_MESSAGE)

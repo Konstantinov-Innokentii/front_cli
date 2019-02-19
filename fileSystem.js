@@ -1,13 +1,13 @@
 const fs = require('fs');
 const path = require('path');
 
-// TODO PE; yolo; переименовать?
+// TODO PE; 2018-08-20; переименовать?
 function getAllFilePathsWithExtension(directoryPath, extension, filePaths) {
     filePaths = filePaths || [];
     // TODO Anonymous Developer; 2016; Необходимо переписать этот код и использовать асинхронные версии функций для чтения из файла
     const fileNames = fs.readdirSync(directoryPath);
     for (const fileName of fileNames) {
-        // TODO Антон; olo; Убедиться, что будет работать под Windows.
+        // TODO Антон; ; Убедиться, что будет работать под Windows.
         const filePath = directoryPath + '/' + fileName;
         if (filePath.endsWith(`.${extension}`)) {
             filePaths.push(filePath);

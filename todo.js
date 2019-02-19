@@ -32,17 +32,17 @@ class Todo {
     // Геттер для даты используется по следующим причинам:
     // 1) Чтобы в методе SortByDate не приводить свойство date к типу Date
     // 2) Дополнительное валидирование даты, помимо используемого в конструкторе класса Date
-    // 3) В случае, если дата невалидная, ее все равно требуется сохранить, для вывода в таблицу
+    // 3) В случае, если дата невалидная, ее все равно требуется сохранить для вывода в таблицу
     get DateObj() {
         let d = new Date(this.date);
         return  /^\d{1,4}(?:-\d{1,2}){0,2}/.test(this.date) && d instanceof Date && !isNaN(d) ? d : null
     }
 
     /**
-     * Парсит из переданной строки комментарии, начинающиеся с TODO.
+     * Парсит из переданной строки комментарии.
      * @param str
-     * @param filename - имя файла, из которого была считана строка
-     * @returns {Todo[]} - Возвращает массив экземпляров класса Todo
+     * @param filename - имя файла, из которого была считана строка.
+     * @returns {Todo[]} - Возвращает массив экземпляров класса Todo.
      */
     static getTodosFromStr(str, filename){
         let regexp = /\/\/\s*todo(?!\s*:?\s*\n)\s*:?\s*(.*)$/igm;
@@ -52,29 +52,40 @@ class Todo {
            todos.push({content: match[1], filename: filename})
         }
 
-        return todos.map(todo => Todo.parseTodo(todo));
+        return todos.map(todo => Todo.parseTodo(todo)).filter(item => item);
     }
 
     /**
-     * Создает объект класса Todo из переданной строки
+     * Создает объект класса Todo из переданной строки.
      * @param todoStr
-     * @returns {Todo} - Возвращает экземпляр класса Todo
+     * @returns {Todo} - Возвращает экземпляр класса Todo.
      */
     static parseTodo(todoStr) {
         let parsedTodo = todoStr.content.split(';', 3);
         if (parsedTodo.length === 3) {
-            return new Todo(parsedTodo[0].trim(),
-                            parsedTodo[1].trim(),
-                            parsedTodo[2].trim(),
-                            parsedTodo[2].indexOf('!') !== -1 ? '!' : null,
-                            todoStr.filename.trim());
+            let user =parsedTodo[0].trim();
+            let data = parsedTodo[1].trim();
+            let text = parsedTodo[2].trim();
+            if ( user|| data || text) {
+                return new Todo(user,
+                                data,
+                                text,
+                                text.includes('!') ? '!' : null,
+                                todoStr.filename.trim());
+            }
         } else {
-            return new Todo(null, '', todoStr.content.trim(), todoStr.content.indexOf('!') !== -1 ? '!' : null, todoStr.filename.trim());
+            let text = todoStr.content.trim();
+            if (text)
+                return new Todo(null,
+                                '',
+                                text,
+                                text.includes('!') ? '!' : null,
+                                todoStr.filename.trim());
         }
     }
 
     /**
-     * Создает из строки - свойства объекта Todo форматированную строку - ячейку таблицы.
+     * Создает из свойства объекта Todo форматированную строку - ячейку таблицы.
      * @param prop - значение свойства.
      * @param maxLen - максимальная длина ячейки таблицы.
      * @returns {string} Возвращает форматированную строку - ячейку таблицы.
@@ -103,10 +114,12 @@ class Todo {
         let ColsWidth = {'user': 4, 'date': 4, 'comment': 7, 'fileName': 8};
         const ColsMaxWidth = {'user': 10, 'date': 10, 'comment': 50, 'fileName': 15};
 
-        // Найдем подходящуюю ширину каждой колонки таблицы
+        // Найдем подходящуюю ширину каждой колонки таблицы.
         if (todos.length > 0) {
+             // Для каждого названия колонки найдем максимальную длину соответсвующего поля в TODO
             Object.keys(ColsWidth).map(property => ColsWidth[property] = Math.max.apply(null,
                 todos.map(todo => todo[property] ? todo[property].length : 0)));
+            // Сравним найденные длины с заданной максимальной шириной колонки
             Object.keys(ColsWidth).forEach(function (col) {
                 if (ColsWidth[col] > ColsMaxWidth[col]) {
                     ColsWidth[col] = ColsMaxWidth[col]
@@ -114,7 +127,6 @@ class Todo {
                 if (ColsWidth[col] < col.length) {
                     ColsWidth[col] = col.length
                 }
-
             });
         }
         const header = Object.keys(ColsWidth).map(col => Todo.propToCell(col, ColsWidth[col]));
@@ -192,7 +204,7 @@ class Todo {
     /**
      * Приводит объект класса Todo к форматированной строке таблицы.
      * @param ColsWidth - ширина колонок таблицы.
-     * @returns {string} - Возвращает форматированную строку.
+     * @returns {string} Возвращает форматированную строку.
      */
     toTableRow(ColsWidth) {
         let res = this.important ? '  !  |' : '     |';
