@@ -32,13 +32,13 @@ function processCommand (command, todos) {
             process.exit(0);
             break;
         case 'show':
-            if (command_splited.length == 1)
+            if (command_splited.length === 1)
                 console.log(Todo.toTable(todos));
             else
                 console.log(INVALID_MESSAGE);
             break;
         case 'sort':
-            if (command_splited.length == 2) {
+            if (command_splited.length === 2) {
                 switch (command_splited[1]) {
                     case 'importance':
                         console.log(Todo.toTable(Todo.sortByImportance(todos)));
@@ -50,7 +50,7 @@ function processCommand (command, todos) {
                         console.log(Todo.toTable(Todo.sortByDate(todos)));
                         break;
                     default:
-                        console.log('wrong command');
+                        console.log(INVALID_MESSAGE);
                         break;
                 }
             }
